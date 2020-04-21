@@ -25,6 +25,12 @@ class Login(webapp2.RequestHandler):
         customMessage = self.request.get('customMessage')
         self.response.write(template.render(customMessage=customMessage))
 
+class AdminLogin(webapp2.RequestHandler):
+    def get(self):
+        template = JINJA_ENVIRONMENT.get_template('admin-login.html')
+        customMessage = self.request.get('customMessage')
+        self.response.write(template.render(customMessage=customMessage))
+
 class Validate(webapp2.RequestHandler):
     def get(self):
         name = self.request.get('name')
@@ -34,7 +40,23 @@ class Validate(webapp2.RequestHandler):
         result = query.fetch()
 
         for entity in result:
-            if entity.name == name and entity.password == int(password):
+            if entity.name == name and entity.password == password:
+                query_params = {'username' : name}
+                self.redirect('/main?' + urllib.urlencode(query_params))
+
+        template = JINJA_ENVIRONMENT.get_template('login.html')
+        self.response.write(template.render(customMessage='Error: Invalid Username or Password'))
+
+class ValidateAdmin(webapp2.RequestHandler):
+    def get(self):
+        name = self.request.get('name')
+        password = self.request.get('password')
+
+        query = admin.query()
+        result = query.fetch()
+
+        for entity in result:
+            if entity.name == name and entity.password == password:
                 query_params = {'username' : name}
                 self.redirect('/main?' + urllib.urlencode(query_params))
 
@@ -152,6 +174,8 @@ class UpdatePassword(webapp2.RequestHandler):
 # [START app]
 app = webapp2.WSGIApplication([
     ('/', Login),
+    ('/adminlogin', AdminLogin),
+    ('/validateadmin', ValidateAdmin),
     ('/validate', Validate),
     ('/main', MainPage),
     ('/name', LandingName),

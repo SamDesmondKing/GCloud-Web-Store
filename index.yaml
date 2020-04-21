@@ -4,3 +4,8 @@ indexes:
   properties:
   - name: name
     direction: desc
+- kind: admin
+  ancestor: yes
+  properties:
+  - name: name
+    direction: desc

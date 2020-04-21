@@ -13,8 +13,8 @@
         <link rel="stylesheet" href="">
     </head>
     <body>
-        <p><strong>Customer Login</strong></p>
-        <form action="/validate" method="get">
+        <p><strong>Admin Login</strong></p>
+        <form action="/validateadmin" method="get">
             <label for="name">Name:</label><br>
             <input type="text" name="name"><br>
             <label for="password">Password:</label><br>
@@ -24,8 +24,8 @@
         <div style="color: red;">
             {{ customMessage }}
         </div>
-        <form action="/adminlogin" method="get">
-            <input type="submit" value="Login as Admin">
+        <form action="/" method="get">
+            <input type="submit" value="Login as Customer">
         </form>
 
         <script src="" async defer></script>
