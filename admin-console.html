@@ -12,18 +12,26 @@
         <link rel="stylesheet" href="">
     </head>
     <body>
+        <p><strong>Admin Console</strong></p>
         <div>
             Current User: {{ currentUser }} 
         </div>
         <br>
+        <!--Admin Control Buttons-->
         <form action="/landingname?{{ currentUserEncode }}" method="post">
             <input type="submit" value="Change Name" style="margin-top: 5px;">
         </form>
         <form action="/landingpassword?{{ currentUserEncode }}" method="post">
             <input type="submit" value="Change Password" style="margin-top: 5px;">
         </form>
-        <form action="/" method="get" style="margin-top: 5px;">
-            <input type="submit" value="Logout">
+        <form action="/newuser?createadmin" method="post" style="margin-top: 5px;">
+            <input type="submit" value="Create New Admin Account">
+        </form>
+        <form action="/deactivateuser" method="post" style="margin-top: 5px;">
+            <input type="submit" value="Deactivate User">
+        </form>
+        <form action="/" method="get">
+            <input type="submit" value="Logout" style="margin-top: 5px;">
         </form>
         <script src="" async defer></script>
     </body>

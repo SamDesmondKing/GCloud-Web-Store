@@ -14,7 +14,7 @@
     </head>
     <body>
         <p><strong>Admin Login</strong></p>
-        <form action="/validateadmin" method="get">
+        <form action="/validateadmin" method="POST">
             <label for="name">Name:</label><br>
             <input type="text" name="name"><br>
             <label for="password">Password:</label><br>
@@ -24,7 +24,7 @@
         <div style="color: red;">
             {{ customMessage }}
         </div>
-        <form action="/" method="get">
+        <form action="/" method="get" style="margin-top: 5px;">
             <input type="submit" value="Login as Customer">
         </form>
 

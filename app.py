@@ -8,7 +8,7 @@ from google.appengine.api import users
 import webapp2
 import jinja2
 
-PROJECT_ID = 'imposing-ring-270422'
+PROJECT_ID = 'sepm-diary-shop'
 
 JINJA_ENVIRONMENT = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.path.dirname(__file__)),
@@ -16,8 +16,9 @@ JINJA_ENVIRONMENT = jinja2.Environment(
     autoescape=True)
 
 class user(ndb.Model):
-    name = ndb.StringProperty()
-    password = ndb.IntegerProperty()
+    username = ndb.StringProperty()
+    password = ndb.StringProperty()
+    admin = ndb.BooleanProperty()
 
 class Login(webapp2.RequestHandler):
     def get(self):
@@ -32,7 +33,7 @@ class AdminLogin(webapp2.RequestHandler):
         self.response.write(template.render(customMessage=customMessage))
 
 class Validate(webapp2.RequestHandler):
-    def get(self):
+    def post(self):
         name = self.request.get('name')
         password = self.request.get('password')
 
@@ -40,7 +41,7 @@ class Validate(webapp2.RequestHandler):
         result = query.fetch()
 
         for entity in result:
-            if entity.name == name and entity.password == password:
+            if entity.username == name and entity.password == password:
                 query_params = {'username' : name}
                 self.redirect('/main?' + urllib.urlencode(query_params))
 
@@ -48,19 +49,19 @@ class Validate(webapp2.RequestHandler):
         self.response.write(template.render(customMessage='Error: Invalid Username or Password'))
 
 class ValidateAdmin(webapp2.RequestHandler):
-    def get(self):
+    def post(self):
         name = self.request.get('name')
         password = self.request.get('password')
 
-        query = admin.query()
+        query = user.query()
         result = query.fetch()
 
         for entity in result:
-            if entity.name == name and entity.password == password:
+            if entity.username == name and entity.password == password and entity.admin == True:
                 query_params = {'username' : name}
-                self.redirect('/main?' + urllib.urlencode(query_params))
+                self.redirect('/adminconsole?' + urllib.urlencode(query_params))
 
-        template = JINJA_ENVIRONMENT.get_template('login.html')
+        template = JINJA_ENVIRONMENT.get_template('admin-login.html')
         self.response.write(template.render(customMessage='Error: Invalid Username or Password'))
 
 class MainPage(webapp2.RequestHandler):
@@ -72,16 +73,17 @@ class MainPage(webapp2.RequestHandler):
         template = JINJA_ENVIRONMENT.get_template('main.html')
         self.response.write(template.render(currentUser=name, currentUserEncode=urllib.urlencode(query_params)))
 
-class LandingName(webapp2.RequestHandler):
+class AdminConsole(webapp2.RequestHandler):
     def get(self):
 
-        currentUser = self.request.get('username')
-        query_params = {'username' : currentUser}
-        customMessage = self.request.get('customMessage')
-        
-        template = JINJA_ENVIRONMENT.get_template('name.html')
-        self.response.write(template.render(customMessage=customMessage, currentUserEncode=urllib.urlencode(query_params), currentUser=currentUser))
+        name = self.request.get('username')
 
+        query_params= {'username' : name}
+        template = JINJA_ENVIRONMENT.get_template('admin-console.html')
+        self.response.write(template.render(currentUser=name, currentUserEncode=urllib.urlencode(query_params)))
+
+
+class LandingName(webapp2.RequestHandler):
     def post(self):
 
         currentUser = self.request.get('username')
@@ -110,8 +112,8 @@ class UpdateName(webapp2.RequestHandler):
             result = query.fetch()
 
             for entity in result:
-                if entity.name == name:
-                    entity.name = newName
+                if entity.username == name:
+                    entity.username = newName
                     entity.put()
 
             username_param = {'username' : newName}
@@ -119,15 +121,6 @@ class UpdateName(webapp2.RequestHandler):
 
 
 class LandingPassword(webapp2.RequestHandler):
-    
-    def get(self):
-        currentUser = self.request.get('username')
-        user_encode = {'username' : currentUser}
-        customMessage = self.request.get('customMessage')
-        
-        template = JINJA_ENVIRONMENT.get_template('password.html')
-        self.response.write(template.render(customMessage=customMessage, currentUserEncode=urllib.urlencode(user_encode), currentUser=currentUser))
-    
     def post(self):
 
         currentUser = self.request.get('username')
@@ -154,13 +147,9 @@ class UpdatePassword(webapp2.RequestHandler):
         result = query.fetch()
         check = False
 
-        logging.error('name is ' + str(name))
-        logging.error('newPassword is ' + str(newPassword))
-        logging.error('oldPassword is ' + str(oldPassword))
-
         for entity in result:
-            if entity.name == name and entity.password == int(oldPassword):
-                entity.password = int(newPassword)
+            if entity.username == name and entity.password == oldPassword:
+                entity.password = newPassword
                 entity.put()
                 check = True 
         
@@ -170,7 +159,55 @@ class UpdatePassword(webapp2.RequestHandler):
         else:
             custom_message = {'customMessage' : 'Error: Old Password is Incorrect'}
             self.redirect('/landingpassword?' + urllib.urlencode(user_encode) + '&' + urllib.urlencode(custom_message))
+
+class LandingNewUser(webapp2.RequestHandler):
+    def post(self):
+        adminCheck = self.request.get('admincheck')
+        template = JINJA_ENVIRONMENT.get_template('new-user.html')
+        self.response.write(template.render(createadmin=adminCheck))
+
+class NewUser(webapp2.RequestHandler):
+    def post(self):
         
+        name = self.request.get('name')
+        password = self.request.get('password')
+        adminCheck = self.request.get('admincheck')
+        error = False
+
+        query = user.query()
+        result = query.fetch()
+
+        # If username is already taken
+        for entity in result:
+            if entity.username == name:
+                template = JINJA_ENVIRONMENT.get_template('new-user.html')
+                self.response.write(template.render(customMessage='Error: Username Already Taken'))
+                error = True
+        
+        if (error == False and adminCheck == '0'):
+            # Add user here
+
+            custom_message = {'customMessage' : 'New user created successfully.'}
+            self.redirect('/?' + urllib.urlencode(custom_message))
+            
+        # Back to login screen
+        #template = JINJA_ENVIRONMENT.get_template('new-user.html')
+        #self.response.write(template.render(customMessage=str(type(adminCheck))))
+
+class LandingDeactivateUser(webapp2.RequestHandler):
+    def post(self):
+        x = "hello"
+        # If user exists, deactivate
+        template = JINJA_ENVIRONMENT.get_template('')
+        self.response.write(template.render())
+
+class DeactivateUser(webapp2.RequestHandler):
+    def post(self):
+        x = "hello"
+        # If user exists, deactivate
+        template = JINJA_ENVIRONMENT.get_template('')
+        self.response.write(template.render())
+
 # [START app]
 app = webapp2.WSGIApplication([
     ('/', Login),
@@ -178,7 +215,10 @@ app = webapp2.WSGIApplication([
     ('/validateadmin', ValidateAdmin),
     ('/validate', Validate),
     ('/main', MainPage),
+    ('/adminconsole', AdminConsole),
     ('/name', LandingName),
+    ('/landingnewuser', LandingNewUser),
+    ('/newuser', NewUser),
     ('/landingpassword', LandingPassword),
     ('/updatepassword', UpdatePassword),
     ('/updatename', UpdateName),

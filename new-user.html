@@ -12,14 +12,14 @@
         <link rel="stylesheet" href="">
     </head>
     <body>
-        Change Username
+        New User
         <br>
-        Current User: {{ currentUser }} 
-        <br>
-        <form action="/updatename?{{ currentUserEncode }}" method="POST">
-            <label for="newName">New Name:</label><br>
-            <input type="text" name="newName"><br>
-            <input type="submit" value="Change Username" style="margin-top: 3px;">
+        <form action="/newuser?admincheck={{createadmin}}" method="POST">
+            <label for="name">Username:</label><br>
+            <input type="text" name="name"><br>
+            <label for="password">Password:</label><br>
+            <input type="password" name="password">
+            <input type="submit" value="Create New User">
         </form>
         <div style="color: red;">
             {{ customMessage }}

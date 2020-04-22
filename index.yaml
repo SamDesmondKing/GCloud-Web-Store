@@ -2,10 +2,5 @@ indexes:
 - kind: user
   ancestor: yes
   properties:
-  - name: name
-    direction: desc
-- kind: admin
-  ancestor: yes
-  properties:
-  - name: name
+  - name: username
     direction: desc
