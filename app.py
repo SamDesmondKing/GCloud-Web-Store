@@ -34,7 +34,7 @@ class AdminLogin(webapp2.RequestHandler):
 
 class Validate(webapp2.RequestHandler):
     def post(self):
-        name = self.request.get('name')
+        name = self.request.get('name').lower()
         password = self.request.get('password')
 
         query = user.query()
@@ -50,7 +50,7 @@ class Validate(webapp2.RequestHandler):
 
 class ValidateAdmin(webapp2.RequestHandler):
     def post(self):
-        name = self.request.get('name')
+        name = self.request.get('name').lower()
         password = self.request.get('password')
 
         query = user.query()
@@ -97,7 +97,7 @@ class UpdateName(webapp2.RequestHandler):
     def post(self):
         
         name = self.request.get('username')
-        newName = self.request.get('newName')
+        newName = self.request.get('newName').lower()
 
         # Saving original username
         query_params = {'username' : name}
@@ -169,7 +169,7 @@ class LandingNewUser(webapp2.RequestHandler):
 class NewUser(webapp2.RequestHandler):
     def post(self):
         
-        name = self.request.get('name')
+        name = self.request.get('name').lower()
         password = self.request.get('password')
         adminCheck = self.request.get('admincheck')
         error = False
@@ -177,22 +177,31 @@ class NewUser(webapp2.RequestHandler):
         query = user.query()
         result = query.fetch()
 
+        # Invalid username or password check
+        if not name or not password:
+            template = JINJA_ENVIRONMENT.get_template('new-user.html')
+            self.response.write(template.render(customMessage='Error: Username or Password cannot be blank.'))
+            error = True
+
         # If username is already taken
         for entity in result:
             if entity.username == name:
                 template = JINJA_ENVIRONMENT.get_template('new-user.html')
-                self.response.write(template.render(customMessage='Error: Username Already Taken'))
+                self.response.write(template.render(customMessage='Error: Username Already Taken.'))
                 error = True
         
+        # Add new user - customer
         if (error == False and adminCheck == '0'):
-            # Add user here
-
+            newUser = user(username=name, password=password, admin=False)
+            newUser.put()
             custom_message = {'customMessage' : 'New user created successfully.'}
             self.redirect('/?' + urllib.urlencode(custom_message))
-            
-        # Back to login screen
-        #template = JINJA_ENVIRONMENT.get_template('new-user.html')
-        #self.response.write(template.render(customMessage=str(type(adminCheck))))
+        # Add new user - admin
+        elif (error == False and adminCheck == '1'):
+            newUser = user(username=name, password=password, admin=True)
+            newUser.put()
+            custom_message = {'customMessage' : 'New admin created successfully.'}
+            self.redirect('/?' + urllib.urlencode(custom_message))
 
 class LandingDeactivateUser(webapp2.RequestHandler):
     def post(self):
