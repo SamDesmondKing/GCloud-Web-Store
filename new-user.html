@@ -12,9 +12,11 @@
         <link rel="stylesheet" href="">
     </head>
     <body>
-        New User
+        Create New User
         <br>
-        <form action="/newuser?admincheck={{createadmin}}" method="POST">
+        Current User: {{ currentUser }} 
+        <br>
+        <form action="/newuser?admincheck={{createadmin}}&{{currentUserEncode}}" method="POST">
             <label for="name">Username:</label><br>
             <input type="text" name="name"><br>
             <label for="password">Password:</label><br>

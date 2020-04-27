@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-{% autoescape true %}
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
@@ -13,22 +12,18 @@
         <link rel="stylesheet" href="">
     </head>
     <body>
-        <p><strong>Admin Login</strong></p>
-        <form action="/validateadmin" method="post">
-            <label for="name">Name:</label><br>
+        Deactivate User
+        <br>
+        Current User: {{ currentUser }}
+        <form action="/deactivateuser?{{currentUserEncode}}" method="POST">
+            <label for="name">Username:</label><br>
             <input type="text" name="name"><br>
-            <label for="password">Password:</label><br>
-            <input type="password" name="password">
-            <input type="submit" value="Log In">
+            <input type="submit" value="Delete User">
         </form>
         <div style="color: red;">
             {{ customMessage }}
         </div>
-        <form action="/" method="get" style="margin-top: 5px;">
-            <input type="submit" value="Login as Customer">
-        </form>
-
+        
         <script src="" async defer></script>
     </body>
 </html>
-{% endautoescape %}
