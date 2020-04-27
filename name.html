@@ -16,7 +16,7 @@
         <br>
         Current User: {{ currentUser }} 
         <br>
-        <form action="/updatename?{{ currentUserEncode }}" method="POST">
+        <form action="/updatename?{{ currentUserEncode }}&admincheck={{admincheck}}" method="POST">
             <label for="newName">New Name:</label><br>
             <input type="text" name="newName"><br>
             <input type="submit" value="Change Username" style="margin-top: 3px;">

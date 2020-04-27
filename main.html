@@ -16,10 +16,10 @@
             Current User: {{ currentUser }} 
         </div>
         <br>
-        <form action="/landingname?{{ currentUserEncode }}" method="post">
+        <form action="/landingname?{{ currentUserEncode }}&admincheck=0" method="post">
             <input type="submit" value="Change Name" style="margin-top: 5px;">
         </form>
-        <form action="/landingpassword?{{ currentUserEncode }}" method="post">
+        <form action="/landingpassword?{{ currentUserEncode }}&admincheck=0" method="post">
             <input type="submit" value="Change Password" style="margin-top: 5px;">
         </form>
         <form action="/" method="get" style="margin-top: 5px;">

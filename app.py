@@ -86,66 +86,74 @@ class AdminConsole(webapp2.RequestHandler):
         template = JINJA_ENVIRONMENT.get_template('admin-console.html')
         self.response.write(template.render(currentUser=name, currentUserEncode=urllib.urlencode(query_params)))
 
-# TODO If we came here from adminconsole, we need to go back to admin console.
 class LandingName(webapp2.RequestHandler):
     def post(self):
+        admincheck = self.request.get('admincheck')
         currentUser = self.request.get('username')
         query_params = {'username' : currentUser}
         customMessage = self.request.get('customMessage')
         template = JINJA_ENVIRONMENT.get_template('name.html')
-        self.response.write(template.render(customMessage=customMessage, currentUserEncode=urllib.urlencode(query_params), currentUser=currentUser))
+        self.response.write(template.render(customMessage=customMessage, currentUserEncode=urllib.urlencode(query_params), currentUser=currentUser, admincheck=admincheck))
 
-# TODO Need to check that new name is unique
-# TODO If we came here from adminconsole, we need to go back to admin console.
 class UpdateName(webapp2.RequestHandler):
     def post(self):
+        admincheck = self.request.get('admincheck')
         currentUser = self.request.get('username')
         newName = self.request.get('newName').lower()
         currentUserEncode = {'username' : currentUser}
+        error = False
 
-        # If empty, send back to LandingName with original username and custom message
-        if not newName:
+        query = user.query()
+        result = query.fetch()
+
+        # Check if new name is unique 
+        for entity in result:
+            if entity.username == newName:
+                error = True
+
+        # If new name is blank or taken, send back to LandingName with original username and custom message
+        if not newName or error == True:
             template = JINJA_ENVIRONMENT.get_template('name.html')
-            self.response.write(template.render(currentUser=currentUser, customMessage='Error: Name Cannot Be Blank', currentUserEncode=urllib.urlencode(currentUserEncode)))
+            self.response.write(template.render(currentUser=currentUser, customMessage='Error: Name Cannot Be Blank', currentUserEncode=urllib.urlencode(currentUserEncode), admincheck=admincheck))
 
         else:
-            query = user.query()
-            result = query.fetch()
-
             for entity in result:
                 if entity.username == currentUser:
                     entity.username = newName
                     newName = entity.username
                     entity.put()
             currentUserEncode = {'username' : newName}
+            # Check whether to send back to main or admin console.
+            if admincheck == 0:
+                template = JINJA_ENVIRONMENT.get_template('main.html')
+                self.response.write(template.render(currentUser=newName, currentUserEncode=urllib.urlencode(currentUserEncode), admincheck=admincheck))
+            else:
+                template = JINJA_ENVIRONMENT.get_template('admin-console.html')
+                self.response.write(template.render(currentUser=newName, currentUserEncode=urllib.urlencode(currentUserEncode), customMessage="Name changed successfully."))
 
-            template = JINJA_ENVIRONMENT.get_template('main.html')
-            self.response.write(template.render(currentUser=newName, currentUserEncode=urllib.urlencode(currentUserEncode)))
-
-# TODO If we came here from adminconsole, we need to go back to admin console.
 class LandingPassword(webapp2.RequestHandler):
     def post(self):
+        admincheck = self.request.get('admincheck')
         currentUser = self.request.get('username')
         user_encode = {'username' : currentUser}
         customMessage = self.request.get('customMessage')
         
         template = JINJA_ENVIRONMENT.get_template('password.html')
-        self.response.write(template.render(customMessage=customMessage, currentUserEncode=urllib.urlencode(user_encode), currentUser=currentUser))
+        self.response.write(template.render(customMessage=customMessage, currentUserEncode=urllib.urlencode(user_encode), currentUser=currentUser, admincheck=admincheck))
 
-# TODO If we came here from adminconsole, we need to go back to admin console.
 class UpdatePassword(webapp2.RequestHandler):
     def post(self):
+        admincheck = self.request.get('admincheck')
         name = self.request.get('username')
         newPassword = self.request.get('newPassword')
         oldPassword = self.request.get('oldPassword')
         query = user.query()
         result = query.fetch()
-        query_params = {'username' : name}
+        currentUserEncode = {'username' : name}
         check = False
 
         # If username's old password doesnt match stored password, then back to passwordlanding with error
         # Else, update username's password
-
         for entity in result:
             if entity.username == name and entity.password == oldPassword:
                 entity.password = newPassword
@@ -153,12 +161,16 @@ class UpdatePassword(webapp2.RequestHandler):
                 check = True 
         
         if check:
-            template = JINJA_ENVIRONMENT.get_template('login.html')
-            self.response.write(template.render(customMessage='Password Change Successful'))
-
+            # Check whether to send back to main or admin console. 
+            if admincheck == 0:
+                template = JINJA_ENVIRONMENT.get_template('login.html')
+                self.response.write(template.render(customMessage='Password Change Successful'))
+            else:
+                template = JINJA_ENVIRONMENT.get_template('admin-console.html')
+                self.response.write(template.render(currentUser=name, currentUserEncode=urllib.urlencode(currentUserEncode), customMessage="Password changed successfully."))
         else:
             template = JINJA_ENVIRONMENT.get_template('password.html')
-            self.response.write(template.render(currentUser=name, customMessage='Error: Old Password is Incorrect', currentUserEncode=urllib.urlencode(query_params)))
+            self.response.write(template.render(currentUser=name, customMessage='Error: Old Password is Incorrect', currentUserEncode=urllib.urlencode(currentUserEncode), admincheck=admincheck))
 
 class LandingNewUser(webapp2.RequestHandler):
     def post(self):
@@ -206,12 +218,11 @@ class NewUser(webapp2.RequestHandler):
             self.response.write(template.render(customMessage='New user created successfully.'))
 
         # Add new user - admin
-        # This should go back to admin console.
         elif (error == False and adminCheck == '1'):
             newUser = user(username=name, password=password, admin=True)
             newUser.put()
-            template = JINJA_ENVIRONMENT.get_template('login.html')
-            self.response.write(template.render(customMessage='New admin created successfully.'))
+            template = JINJA_ENVIRONMENT.get_template('admin-console.html')
+            self.response.write(template.render(customMessage='New admin created successfully.', currentUser=currentUser, currentUserEncode=urllib.urlencode(user_encode)))
 
 class LandingDeactivateUser(webapp2.RequestHandler):
     def post(self):
@@ -220,7 +231,6 @@ class LandingDeactivateUser(webapp2.RequestHandler):
         template = JINJA_ENVIRONMENT.get_template('deactivateuser.html')
         self.response.write(template.render(currentUser=currentUser, currentUserEncode=urllib.urlencode(user_encode)))
 
-# TODO Need to make it so that an admin cannot delete themself. 
 class DeactivateUser(webapp2.RequestHandler):
     def post(self):
         currentUser = self.request.get('username')
@@ -230,9 +240,15 @@ class DeactivateUser(webapp2.RequestHandler):
         result = query.fetch()
         response = False
 
+        # If trying to delete yourself, cancel.
+        if currentUser == name:
+            template = JINJA_ENVIRONMENT.get_template('deactivateuser.html')
+            self.response.write(template.render(customMessage='Error: you can\'t delete yourself.', currentUser=currentUser, currentUserEncode=urllib.urlencode(user_encode)))
+            response = True
+
         # If user exists, deactivate
         for entity in result:
-            if entity.username == name:
+            if entity.username == name and response == False:
                 entity.key.delete()
                 template = JINJA_ENVIRONMENT.get_template('admin-console.html')
                 self.response.write(template.render(customMessage='User deleted.', currentUser=currentUser, currentUserEncode=urllib.urlencode(user_encode)))

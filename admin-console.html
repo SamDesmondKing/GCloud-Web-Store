@@ -18,10 +18,10 @@
         </div>
         <br>
         <!--Admin Control Buttons-->
-        <form action="/landingname?{{ currentUserEncode }}" method="post">
+        <form action="/landingname?{{ currentUserEncode }}&admincheck=1" method="post">
             <input type="submit" value="Change Name" style="margin-top: 5px;">
         </form>
-        <form action="/landingpassword?{{ currentUserEncode }}" method="post">
+        <form action="/landingpassword?{{ currentUserEncode }}&admincheck=1" method="post">
             <input type="submit" value="Change Password" style="margin-top: 5px;">
         </form>
         <form action="/landingnewuser?{{ currentUserEncode }}" method="post" style="margin-top: 5px;">
