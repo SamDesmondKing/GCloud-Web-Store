@@ -182,8 +182,14 @@ class LandingNewUser(webapp2.RequestHandler):
         user_encode = {'username' : currentUser}
 
         adminCheck = self.request.get('admincheck')
+
+        if (adminCheck == '0'):
+            adminoruser = "Sign Up"
+        else:
+            adminoruser = "Create Admin"
+
         template = JINJA_ENVIRONMENT.get_template('new-user.html')
-        self.response.write(template.render(createadmin=adminCheck, currentUser=currentUser, currentUserEncode=urllib.urlencode(user_encode)))
+        self.response.write(template.render(createadmin=adminCheck, currentUser=currentUser, currentUserEncode=urllib.urlencode(user_encode), adminoruser=adminoruser))
 
 class NewUser(webapp2.RequestHandler):
     def post(self):
@@ -197,17 +203,22 @@ class NewUser(webapp2.RequestHandler):
         query = user.query()
         result = query.fetch()
 
+        if (adminCheck == '0'):
+            adminoruser = "Sign Up"
+        else:
+            adminoruser = "Create Admin"
+
         # Invalid username or password check
         if not name or not password:
             template = JINJA_ENVIRONMENT.get_template('new-user.html')
-            self.response.write(template.render(customMessage='Error: Username or Password cannot be blank.', createadmin=adminCheck, currentUser=currentUser, currentUserEncode=urllib.urlencode(user_encode)))
+            self.response.write(template.render(customMessage='Error: Username or Password cannot be blank.', createadmin=adminCheck, currentUser=currentUser, currentUserEncode=urllib.urlencode(user_encode), adminoruser=adminoruser))
             error = True
 
         # If username is already taken
         for entity in result:
             if entity.username == name:
                 template = JINJA_ENVIRONMENT.get_template('new-user.html')
-                self.response.write(template.render(customMessage='Error: Username Already Taken.', createadmin=adminCheck, currentUser=currentUser, currentUserEncode=urllib.urlencode(user_encode)))
+                self.response.write(template.render(customMessage='Error: Username Already Taken.', createadmin=adminCheck, currentUser=currentUser, currentUserEncode=urllib.urlencode(user_encode), adminoruser=adminoruser))
                 error = True
         
         # Add new user - customer

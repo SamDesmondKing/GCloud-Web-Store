@@ -4,10 +4,15 @@ body {
   background-color: #00FFFF;
   height: 100vh;
 }
+
+.custom-bottom-margin {
+  margin-bottom: 9px !important;
+}
+
 #login .container #login-row #login-column #login-box {
   margin-top: 120px;
   max-width: 600px;
-  height: 320px;
+  height: 360px;
   border: 1px solid #9C9C9C;
   background-color: #EAEAEA;
 }
@@ -27,7 +32,7 @@ body {
 #register .container #register-row #register-column #register-box {
   margin-top: 120px;
   max-width: 600px;
-  height: 400px;
+  height: 430px;
   border: 1px solid #9C9C9C;
   background-color: #EAEAEA;
 }
@@ -49,3 +54,4 @@ body {
   text-decoration: underline;
   font-weight: bold;
 }
+

@@ -1,32 +1,66 @@
 <!DOCTYPE html>
-<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title></title>
-        <meta name="description" content="">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="">
-    </head>
-    <body>
-        Create New User
-        <br>
-        Current User: {{ currentUser }} 
-        <br>
-        <form action="/newuser?admincheck={{createadmin}}&{{currentUserEncode}}" method="POST">
-            <label for="name">Username:</label><br>
-            <input type="text" name="name"><br>
-            <label for="password">Password:</label><br>
-            <input type="password" name="password">
-            <input type="submit" value="Create New User">
-        </form>
-        <div style="color: red;">
-            {{ customMessage }}
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="description" content="">
+<meta name="author" content="">
+
+<head>
+    <!--Bootstrap-->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+    <!--Custom CSS-->
+    <link href="css\login.css" rel="stylesheet" id="bootstrap-css">
+</head>
+
+<body>
+    <div id="register">
+        <div class="container">
+            <div id="register-row" class="row justify-content-center align-items-center">
+                <div id="register-column" class="col-md-6">
+                    <div id="register-box" class="col-md-12">
+                        <form id="register-form" class="form"
+                            action="/newuser?admincheck={{createadmin}}&{{currentUserEncode}}" method="POST">
+                            <div id="register-form" class="form">
+                                <h3 class="text-center text-info">{{adminoruser}}</h3>
+                                <div class="form-group custom-bottom-margin">
+                                    <label for="name" class="text-info">Username:</label><br>
+                                    <input type="text" name="name" id="username" class="form-control">
+                                </div>
+                                <div class="form-group custom-bottom-margin">
+                                    <label for="password" class="text-info">Password:</label><br>
+                                    <input type="text" name="password" id="password" class="form-control">
+                                </div>
+                                <div style="color: red;" class="custom-bottom-margin">
+                                    {{ customMessage }}
+                                </div>
+                                <div class="form-group custom-bottom-margin">
+                                    <input type="submit" name="submit" class="btn btn-info btn-md" value="submit">
+                                </div>
+                                
+                        </form>
+                        <div class="form-group custom-bottom-margin">
+                            <form action="/" method="GET">
+                                <input type="submit" value="Back to Sign In" class="btn btn-info btn-md">
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        
-        <script src="" async defer></script>
-    </body>
+    </div>
+    </div>
+    <!--Javascript-->
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+</body>
+
 </html>
