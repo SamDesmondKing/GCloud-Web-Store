@@ -1,39 +1,72 @@
 <!DOCTYPE html>
 {% autoescape true %}
-<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title></title>
-        <meta name="description" content="">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="">
-    </head>
-    <body>
-        <p><strong>Customer Login</strong></p>
-        <form action="/validate" method="POST">
-            <label for="name">Name:</label><br>
-            <input type="text" name="name"><br>
-            <label for="password">Password:</label><br>
-            <input type="password" name="password">
-            <input type="submit" value="Log In">
-        </form>
-        <div style="color: red;">
-            {{ customMessage }}
-        </div>
-        <form action="/landingnewuser" method="post" style="margin-top: 5px;">
-            <input type="submit" value="Create New Account">
-            <input type="hidden" name="admincheck" value="0">
-        </form>
-        <form action="/adminlogin" method="post" style="margin-top: 5px;">
-            <input type="submit" value="Login as Admin">
-        </form>
-        
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="description" content="">
+<meta name="author" content="">
 
-        <script src="" async defer></script>
-    </body>
+<head>
+	<!--Bootstrap-->
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+		integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+	<!--Custom CSS-->
+	<link href="css\login.css" rel="stylesheet" id="bootstrap-css">
+</head>
+
+<body>
+	<div id="login">
+		<div class="container">
+			<div id="login-row" class="row justify-content-center align-items-center">
+				<div id="login-column" class="col-md-6">
+					<div id="login-box" class="col-md-12">
+						<div id="login-form" class="form" action="/validate" method="POST">
+							<!--Login form-->
+							<form action="/validate" method="POST">
+								<h3 class="text-center text-info">Login</h3>
+								<div class="form-group">
+									<label for="name" class="text-info">Username:</label><br>
+									<input type="text" name="name" id="username" class="form-control">
+								</div>
+								<div class="form-group">
+									<label for="password" class="text-info">Password:</label><br>
+									<input type="text" name="password" id="password" class="form-control">
+								</div>
+								<div class="form-group">
+									<input type="submit" name="submit" class="btn btn-info btn-md" value="submit">
+								</div>
+							</form>
+							<!--Register new user-->
+							<div id="register-link" class="text-right">
+								<form action="/landingnewuser" method="POST">
+									<input type="submit" value="Create New Account" class="btn btn-info btn-md">
+									<input type="hidden" name="admincheck" value="0">
+								</form>
+							</div>
+						</div>
+						<!--Error Message-->
+						<div style="color: red;">
+							{{ customMessage }}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	</div>
+
+	<!--Javascript-->
+	<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+		integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+		crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+		integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+		crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+		integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+		crossorigin="anonymous"></script>
+</body>
+
 </html>
 {% endautoescape %}
