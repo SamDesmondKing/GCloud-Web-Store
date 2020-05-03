@@ -124,7 +124,7 @@ class UpdateName(webapp2.RequestHandler):
                     entity.put()
             currentUserEncode = {'username' : newName}
             # Check whether to send back to main or admin console.
-            if admincheck == 0:
+            if admincheck == '0':
                 template = JINJA_ENVIRONMENT.get_template('main.html')
                 self.response.write(template.render(currentUser=newName, currentUserEncode=urllib.urlencode(currentUserEncode), admincheck=admincheck))
             else:
@@ -162,11 +162,11 @@ class UpdatePassword(webapp2.RequestHandler):
         
         if check:
             # Check whether to send back to main or admin console. 
-            if admincheck == 0:
+            if admincheck == '0':
                 template = JINJA_ENVIRONMENT.get_template('login.html')
                 self.response.write(template.render(customMessage='Password Change Successful'))
             else:
-                template = JINJA_ENVIRONMENT.get_template('admin-console.html')
+                template = JINJA_ENVIRONMENT.get_template('admin-login.html')
                 self.response.write(template.render(currentUser=name, currentUserEncode=urllib.urlencode(currentUserEncode), customMessage="Password changed successfully."))
         else:
             template = JINJA_ENVIRONMENT.get_template('password.html')
@@ -262,7 +262,7 @@ class DeactivateUser(webapp2.RequestHandler):
             if entity.username == name and response == False:
                 entity.key.delete()
                 template = JINJA_ENVIRONMENT.get_template('admin-console.html')
-                self.response.write(template.render(customMessage='User deleted.', currentUser=currentUser, currentUserEncode=urllib.urlencode(user_encode)))
+                self.response.write(template.render(customMessage='User deactivated.', currentUser=currentUser, currentUserEncode=urllib.urlencode(user_encode)))
                 response = True
 
         if response == False:
