@@ -5,6 +5,7 @@
  */
 body {
   overflow-x: hidden;
+  
 }
 
 #sidebar-wrapper {
@@ -14,7 +15,7 @@ body {
   -moz-transition: margin .25s ease-out;
   -o-transition: margin .25s ease-out;
   transition: margin .25s ease-out;
-  background-color: #00FFFF;
+  background-color: #f6f6f6;
 }
 
 #sidebar-wrapper .sidebar-heading {
@@ -27,7 +28,7 @@ body {
 }
 
 .list-group-item {
-  background-color: #00FFFF;
+  background-color: #f6f6f6;
 }
 
 #page-content-wrapper {

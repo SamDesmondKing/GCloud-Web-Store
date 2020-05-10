@@ -1,0 +1,51 @@
+
+#container {
+  float: right;
+  margin-right: 2%;
+  width: 10%;
+  text-align: center;
+  
+ }
+
+
+
+ body {
+  background-color: #e6e6e6;
+  background-image: ;
+  color: white;
+  font-size: 40px;
+  font-family: serif;
+  font-style: italic;
+
+  
+
+.left_logo{
+
+  background-image: url(css/mydiary1.png);
+  height: 80px;
+  width: 90px;
+  margin: 0px 5px;
+  border-radius: none;
+  background-size: cover;
+
+
+}
+<h1 style="color: black"> MY<span>
+<strong>DIARY</strong></span></h1>
+
+
+rgba(0,0,0,.125)
+
+
+.custom-bottom-margin{
+  background-color: #101010;
+  color: white;
+  font-size: 27px;
+  padding: 15px 30px;
+  display: inline-block;
+  text-align: center;
+  border-radius: 10px;
+  font-family: serif;
+  font-style: 'Montserrat';
+}
+

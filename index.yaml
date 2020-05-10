@@ -1,6 +1,14 @@
 indexes:
+
 - kind: user
-  ancestor: yes
+  ancestor: no
   properties:
   - name: username
+  
+- kind: diary
+  ancestor: no
+  properties:
+  - user: username
+    direction: desc
+  - purchaseDate: purchaseDate
     direction: desc

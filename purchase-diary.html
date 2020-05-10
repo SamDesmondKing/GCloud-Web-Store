@@ -9,8 +9,7 @@
 
   <title>Diary App</title>
 
-  <link rel="stylesheet"
-          href="https://fonts.googleapis.com/css?family=Montserrat:400,800">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:400,800">
 
   <!-- Bootstrap core CSS -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
@@ -20,13 +19,14 @@
   <link href="css\home.css" rel="stylesheet">
 
 </head>
+
 <body>
   <div class="d-flex" id="wrapper">
     <div class="border-right" id="sidebar-wrapper">
       <div class="sidebar-heading font-weight-bold">
         <a class="text-dark" role="button">
           <h1 style="color:black">MY
-<strong>DIARY</strong></h1>
+            <strong>DIARY</strong></h1>
         </a>
       </div>
       <!-- Sidebar -->
@@ -72,28 +72,44 @@
               <form action="/landingpassword?{{ currentUserEncode }}&admincheck=0" method="post">
                 <input type="submit" value="Change Password" class="dropdown-item">
               </form>
-            <div class="dropdown-divider"></div>
-            <div>
-              <form action="/" method="GET">
-                <input type="submit" value="Logout" class="dropdown-item">
-              </form>
+              <div class="dropdown-divider"></div>
+              <div>
+                <form action="/" method="GET">
+                  <input type="submit" value="Logout" class="dropdown-item">
+                </form>
+              </div>
             </div>
           </div>
-        </div>
       </nav>
+      
+      <!-- Inner page content -->
       <div class="container-fluid">
-        <h1 class="mt-4">Change Username</h1>
-        <h1 class="mt-4">Current User: {{ currentUser }}</h1>
-        <form action="/updatename?{{ currentUserEncode }}&admincheck={{admincheck}}" method="POST">
-            <label for="newName">New Name:</label><br>
-            <input type="text" name="newName"><br>
-            <input type="submit" value="Change Username" style="margin-top: 3px;">
-        </form>
-        <div style="color: red;">
-            {{ customMessage }}
+        <h1 class="mt-4">Checkout</h1><br>
+        <div style="color: black;" class="custom-bottom-margin">
+          {{ description }}
         </div>
-        <p></p>
+        <div style="color: black;" class="custom-bottom-margin">
+          Total cost: ${{ price }}
+        </div>
+        <br>
+        <form action="/makepurchase?{{currentUserEncode}}&{{paperColour}}&{{coverTheme}}&{{paperType}}&{{coverText}}" method="post">
+          <label for="paperColour">Choose a delivery option:</label><br>
+          <select name="deliveryOption">
+            {% for delivery in deliveryOptions %}
+            <option value="{{ delivery }}">{{ delivery }}</option>
+            {% endfor %}
+          </select><br><br>
+          <label for="coverTheme">Choose a payment method:</label><br>
+          <select name="paymentChoice">
+            {% for choice in paymentChoices %}
+            <option value="{{ choice }}">{{ choice }}</option>
+            {% endfor %}
+          </select><br><br>
+          <input type="submit" value="Purchase">
+        </form>
       </div>
+    </div>
+    <!--  End inner page content -->
     </div>
     <!-- /#page-content-wrapper -->
 

@@ -1,0 +1,187 @@
+<html>
+
+<head>
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:400,800">
+	<style>
+		* {
+
+			margin: 0;
+			padding: 0;
+			list-style: none;
+			text-decoration-color: none;
+			text-decoration-line: none
+		}
+
+		.header {
+			width: 100%;
+			height: 80px;
+			display: block;
+			background-color: #101010;
+		}
+
+		.inner_header {
+			width: 90%;
+			height: 100%;
+			display: block;
+			margin: 0 auto;
+		}
+
+		.logo_container {
+			height: 100%;
+			display: table;
+			float: left;
+		}
+
+		.logo_container h1 {
+			color: white;
+			height: 100%;
+			display: table-cell;
+			vertical-align: middle;
+			font-family: 'Montserrat';
+			font-size: 32px;
+			font-weight: 200;
+
+		}
+
+		.logo_container h1 span {
+			font-weight: 800;
+		}
+
+		.navagation {
+			float: right;
+			height: 100%;
+		}
+
+		.navagation a {
+			height: 100%;
+			display: table;
+			float: left;
+			padding: 0px 20px;
+
+		}
+
+		.navagation a:last-child {
+			padding-right: 0;
+
+		}
+
+		.navagation a li {
+			display: table-cell;
+			vertical-align: middle;
+			height: 100%;
+			color: white;
+			font-style: 'Montserrat';
+			font-size: 15px;
+		}
+
+		.left_logo {
+			text-align: center;
+		}
+
+		.head {
+			text-align: center;
+
+		}
+
+		h2 {
+			display: inline-block;
+			color: black;
+			font-family: serif;
+			font-size: 50px;
+			font-style: 'Montserrat';
+			position: inherit;
+			margin: 40px
+		}
+
+
+		.box {
+
+			background-image: url(css/image.jpg);
+			padding: 150px 200px;
+			margin: 20px;
+			border-radius: 15px;
+			background-size: cover;
+		}
+
+
+
+		p {
+			float: right;
+			display: table-cell;
+			color: white;
+			font-family: serif;
+			font-size: 40px;
+			margin: 0 auto;
+			font-style: italic;
+			position: inherit;
+
+		}
+
+		.button_container {
+			text-align: center;
+		}
+
+		.button {
+			background-color: #101010;
+			color: white;
+			font-size: 27px;
+			padding: 20px 40px;
+			display: inline-block;
+			text-align: center;
+			border-radius: 20px;
+			font-family: serif;
+			font-style: 'Montserrat';
+
+
+
+		}
+
+		.inline-form {
+			display: inline-block;
+		}
+
+	</style>
+</head>
+
+<body>
+	<div class="header">
+		<div class="inner_header">
+			<div class="logo_container">
+				<h1>MY<span>DIARY</span></h1>
+			</div>
+			<ul class="navagation">
+				<a>
+					<li>Home</li>
+				</a>
+				<a>
+					<li>About</li>
+				</a>
+				<a>
+					<li>Contact us</li>
+				</a>
+				<a>
+					<li>Account</li>
+				</a>
+			</ul>
+
+			<div>
+			</div>
+		</div>
+		<div class="head">
+			<h2> Pick Your Favorite Diaries</h2>
+		</div>
+		<div class="box">
+			<p>Empty your Mind,</br>Write your Diary.</p>
+		</div>
+		<div class="button_container">
+			<form action="/login" method="get" class="inline-form">
+				<input type="submit" value="Log In" class="button">
+			</form>
+			<form action="/landingnewuser" method="post" class="inline-form">
+				<input type="submit" value="Sign Up" class="button">
+				<input type="hidden" name="admincheck" value="0">
+			</form>
+		</div>
+</body>
+
+</html>

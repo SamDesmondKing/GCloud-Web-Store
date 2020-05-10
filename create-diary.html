@@ -9,8 +9,7 @@
 
   <title>Diary App</title>
 
-  <link rel="stylesheet"
-          href="https://fonts.googleapis.com/css?family=Montserrat:400,800">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:400,800">
 
   <!-- Bootstrap core CSS -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
@@ -20,13 +19,14 @@
   <link href="css\home.css" rel="stylesheet">
 
 </head>
+
 <body>
   <div class="d-flex" id="wrapper">
     <div class="border-right" id="sidebar-wrapper">
       <div class="sidebar-heading font-weight-bold">
         <a class="text-dark" role="button">
           <h1 style="color:black">MY
-<strong>DIARY</strong></h1>
+            <strong>DIARY</strong></h1>
         </a>
       </div>
       <!-- Sidebar -->
@@ -72,27 +72,42 @@
               <form action="/landingpassword?{{ currentUserEncode }}&admincheck=0" method="post">
                 <input type="submit" value="Change Password" class="dropdown-item">
               </form>
-            <div class="dropdown-divider"></div>
-            <div>
-              <form action="/" method="GET">
-                <input type="submit" value="Logout" class="dropdown-item">
-              </form>
+              <div class="dropdown-divider"></div>
+              <div>
+                <form action="/" method="GET">
+                  <input type="submit" value="Logout" class="dropdown-item">
+                </form>
+              </div>
             </div>
           </div>
-        </div>
       </nav>
       <div class="container-fluid">
-        <h1 class="mt-4">Change Username</h1>
+        <h1 class="mt-4">Customise Your Diary</h1>
         <h1 class="mt-4">Current User: {{ currentUser }}</h1>
-        <form action="/updatename?{{ currentUserEncode }}&admincheck={{admincheck}}" method="POST">
-            <label for="newName">New Name:</label><br>
-            <input type="text" name="newName"><br>
-            <input type="submit" value="Change Username" style="margin-top: 3px;">
+        <br>
+        <form action="/purchasediary?{{currentUserEncode}}" method="post">
+          <label for="paperColour">Choose a paper colour:</label><br>
+          <select name="paperColour">
+            {% for colour in paperColours %}
+            <option value="{{ colour }}">{{ colour }}</option>
+            {% endfor %}
+          </select><br><br>
+          <label for="coverTheme">Choose a cover theme:</label><br>
+          <select name="coverTheme">
+            {% for theme in coverThemes %}
+            <option value="{{ theme }}">{{ theme }}</option>
+            {% endfor %}
+          </select><br><br>
+          <label for="paperType">Choose a paper type:</label><br>
+          <select name="paperType">
+            {% for type in paperTypes %}
+            <option value="{{ type }}">{{ type }}</option>
+            {% endfor %}
+          </select><br><br>
+          <label for="coverText">Custom Cover Text:</label><br>
+          <input type="text" name="coverText" value="My Diary"><br><br>
+          <input type="submit" value="Go to Checkout">
         </form>
-        <div style="color: red;">
-            {{ customMessage }}
-        </div>
-        <p></p>
       </div>
     </div>
     <!-- /#page-content-wrapper -->

@@ -4,6 +4,7 @@ import logging
 
 from google.appengine.ext import ndb
 from google.appengine.api import users
+from datetime import datetime
 
 import webapp2
 import jinja2
@@ -19,6 +20,37 @@ class user(ndb.Model):
     username = ndb.StringProperty()
     password = ndb.StringProperty()
     admin = ndb.BooleanProperty()
+
+class diary(ndb.Model):
+    coverText = ndb.StringProperty()
+    coverTheme = ndb.StringProperty()
+    deliveryOption = ndb.StringProperty()
+    paperColour = ndb.StringProperty()
+    paperType = ndb.StringProperty()
+    paymentChoice = ndb.StringProperty()
+    price = ndb.FloatProperty()
+    purchaseDate = ndb.DateTimeProperty()
+    user = ndb.StringProperty()
+
+class paperColour(ndb.Model):
+    paperColour = ndb.StringProperty()
+
+class coverTheme(ndb.Model):
+    coverTheme = ndb.StringProperty()
+
+class paperType(ndb.Model):
+    paperType = ndb.StringProperty()
+
+class deliveryOption(ndb.Model):
+    deliveryOption = ndb.StringProperty()
+
+class paymentChoice(ndb.Model):
+    paymentChoice = ndb.StringProperty()
+
+class Home(webapp2.RequestHandler):
+    def get(self):
+        template = JINJA_ENVIRONMENT.get_template('home.html')
+        self.response.write(template.render())
 
 class Login(webapp2.RequestHandler):
     def get(self):
@@ -269,9 +301,104 @@ class DeactivateUser(webapp2.RequestHandler):
             template = JINJA_ENVIRONMENT.get_template('admin-console.html')
             self.response.write(template.render('Error: user not found.', currentUser=currentUser, currentUserEncode=urllib.urlencode(user_encode)))
 
+class CreateDiary(webapp2.RequestHandler):
+    def post(self):
+        currentUser = self.request.get('username')
+        currentUserEncode = {'username' : currentUser}
+
+        paperColours = []
+        colourQuery = paperColour.query()
+        coloursResult = colourQuery.fetch()
+
+        for colour in coloursResult:
+            paperColours.append(colour.paperColour)
+
+        coverThemes = []
+        themeQuery = coverTheme.query()
+        themesResult = themeQuery.fetch()
+
+        for theme in themesResult:
+            coverThemes.append(theme.coverTheme)
+
+        paperTypes = []
+        paperTypeQuery = paperType.query()
+        paperTypeResult = paperTypeQuery.fetch()
+
+        for paper in paperTypeResult:
+            paperTypes.append(paper.paperType)
+
+        template = JINJA_ENVIRONMENT.get_template('create-diary.html')
+        self.response.write(template.render(customMessage='', currentUser=currentUser, currentUserEncode=urllib.urlencode(currentUserEncode), paperColours=paperColours, coverThemes=coverThemes, paperTypes=paperTypes))
+
+class PurchaseDiary(webapp2.RequestHandler):
+    def post(self):
+        # Get diary customisation parameters from url
+        # Send these parameters to purchase-diary.html page
+        currentUser = self.request.get('username')
+        currentUserEncode = {'username' : currentUser}
+
+        paperColour = self.request.get('paperColour')
+        paperColourEncode = {'paperColour' : paperColour}
+
+        coverTheme = self.request.get('coverTheme')
+        coverThemeEncode = {'coverTheme' : coverTheme}
+        
+        paperType = self.request.get('paperType')
+        paperTypeEncode = {'paperType' : paperType}
+        
+        coverText = self.request.get('coverText')
+        coverTextEncode = {'coverText' : coverText}
+
+        price = 29.99
+
+        description = 'You have chosen a Diary with ' + paperColour + ' ' + paperType + ' paper, a ' + coverTheme + ' cover, and the custom text ' + coverText + '.'
+
+        deliveryOptions = []
+        deliveryQuery = deliveryOption.query()
+        deliveryResult = deliveryQuery.fetch()
+
+        for option in deliveryResult:
+            deliveryOptions.append(option.deliveryOption)
+
+        paymentChoices = []
+        paymentQuery = paymentChoice.query()
+        paymentResult = paymentQuery.fetch()
+
+        for payment in paymentResult:
+            paymentChoices.append(payment.paymentChoice)
+
+        template = JINJA_ENVIRONMENT.get_template('purchase-diary.html')
+        self.response.write(template.render(currentUser=currentUser, currentUserEncode=urllib.urlencode(currentUserEncode), paperColour=urllib.urlencode(paperColourEncode), coverTheme=urllib.urlencode(coverThemeEncode), paperType=urllib.urlencode(paperTypeEncode), coverText=urllib.urlencode(coverTextEncode), description=description, deliveryOptions=deliveryOptions, paymentChoices=paymentChoices, price=price))
+
+class MakePurchase(webapp2.RequestHandler):
+    def post(self):
+        # get diary purchase and delivery parameters from url, along with customisation params
+        # add diary entity to database
+        # Send back to main with success message. 
+        currentUser = self.request.get('username')
+        currentUserEncode = {'username' : currentUser}
+
+        paperColour = self.request.get('paperColour')
+        coverTheme = self.request.get('coverTheme')
+        paperType = self.request.get('paperType')
+        coverText = self.request.get('coverText')
+        paymentChoice = self.request.get('paymentChoice')
+        deliveryOption = self.request.get('deliveryOption')
+
+        price = 29.99
+        purchaseDate = datetime.now()
+
+        newDiary = diary(coverText=coverText, coverTheme=coverTheme, deliveryOption=deliveryOption, paperColour=paperColour, paperType=paperType, paymentChoice=paymentChoice, price=price, purchaseDate=purchaseDate, user=currentUser)
+        newDiary.put()
+
+        template = JINJA_ENVIRONMENT.get_template('main.html')
+        self.response.write(template.render(currentUser=currentUser, currentUserEncode=urllib.urlencode(currentUserEncode), customMessage='Purchase Successful'))
+
+
 # [START app]
 app = webapp2.WSGIApplication([
-    ('/', Login),
+    ('/', Home),
+    ('/login', Login),
     ('/adminlogin', AdminLogin),
     ('/validateadmin', ValidateAdmin),
     ('/validate', Validate),
@@ -286,5 +413,7 @@ app = webapp2.WSGIApplication([
     ('/landingname', LandingName),
     ('/landingdeactivateuser', LandingDeactivateUser),
     ('/deactivateuser', DeactivateUser),
+    ('/creatediary', CreateDiary),
+    ('/purchasediary', PurchaseDiary),
+    ('/makepurchase', MakePurchase),
 ], debug=True)
-# [END app]
