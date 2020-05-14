@@ -25,7 +25,9 @@
     <div class="border-right" id="sidebar-wrapper">
       <div class="sidebar-heading font-weight-bold">
         <a class="text-dark" role="button">
-       <h3><small><bold>ADMIN CONSOLE</bold></small></h3>
+          <form action="/console-return?{{ currentUserEncode }}&admincheck=1" method="post">
+                <h3><small><bold></bold><button type="submit" value="Submit" style="border: none; background: none;">ADMIN CONSOLE</button></bold></small></h3>
+            </form>
         </a>
       </div>
       <!-- Sidebar -->

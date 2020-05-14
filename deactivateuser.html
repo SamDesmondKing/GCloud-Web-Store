@@ -25,13 +25,15 @@
     <div class="border-right" id="sidebar-wrapper">
       <div class="sidebar-heading font-weight-bold">
         <a class="text-dark" role="button">
-          <h3><small><bold>ADMIN CONSOLE</bold></small></h3>
+          <form action="/console-return?{{ currentUserEncode }}&admincheck=1" method="post">
+                <h3><small><bold></bold><button type="submit" value="Submit" style="border: none; background: none;">ADMIN CONSOLE</button></bold></small></h3>
+            </form>
         </a>
       </div>
       <!-- Sidebar -->
       <div class="list-group list-group-flush">
         <div id="grey-border">
-          <form action="" method="post" class="grey-border">
+          <form action="/custom-params?{{ currentUserEncode }}" method="post" class="grey-border">
             <input type="submit" value="Customization Parameters" class="list-group-item list-group-item-action font-weight-bold">
           </form>
         </div>
@@ -48,7 +50,6 @@
         </div>
       </div>
     </div>
-
     <!-- Page Content -->
     <div id="page-content-wrapper">
 
@@ -85,7 +86,7 @@
         <h1 class="mt-4">Current User: {{ currentUser }}</h1>
         <form action="/deactivateuser?{{currentUserEncode}}" method="POST">
             <label for="name">Username:</label><br>
-            <input type="text" name="name"><br>
+            <input type="text" name="name"><br><br>
             <input type="submit" value="Deactivate User">
         </form>
         <div style="color: red;">

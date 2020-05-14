@@ -25,13 +25,15 @@
     <div class="border-right" id="sidebar-wrapper">
       <div class="sidebar-heading font-weight-bold">
         <a class="text-dark" role="button">
-       <h3><small><bold>ADMIN CONSOLE</bold></small></h3>
+            <form action="/console-return?{{ currentUserEncode }}&admincheck=1" method="post">
+                <h3><small><bold></bold><button type="submit" value="Submit" style="border: none; background: none;">ADMIN CONSOLE</button></bold></small></h3>
+            </form>
         </a>
       </div>
       <!-- Sidebar -->
       <div class="list-group list-group-flush">
         <div id="grey-border">
-          <form action="" method="post" class="grey-border">
+          <form action="/custom-params?{{ currentUserEncode }}" method="post" class="grey-border">
             <input type="submit" value="Customization Parameters" class="list-group-item list-group-item-action font-weight-bold">
           </form>
         </div>
@@ -80,25 +82,21 @@
       </nav>
 
       <div class="container-fluid">
-        <h1 class="mt-4">Alter Customization Options</h1>
+        <h1 class="mt-4">Add Option to {{param}}</h1>
         <div style="color: red;" class="custom-bottom-margin">
           {{ customMessage }}
-      </div>
+      </div><br>
+      <form action="/add-option?{{currentUserEncode}}&{{paramEncode}}" method="post">
+        <label for="option">Enter {{param}} Option to Add:</label><br>
+        <input type="text" id="option" name="option" value=""><br><br>
+        <input type="submit" value="Submit">
+      </form> 
+
+
       <br>
-      <form action="/choose-option">
-        <label for="param">Choose a customization parameter to configure:</label><br>
-        <select id="param" name="param">
-          <option value="coverTheme">Cover Theme</option>
-          <option value="paperColour">Paper Colour</option>
-          <option value="paperType">Paper Type</option>
-        </select><br><br>
-        <label for="param">Choose an action to perform:</label><br>
-        <select id="action" name="action">
-          <option value="remove">Remove Option from this Parameter</option>
-          <option value="add">Add Option to this Parameter</option>
-        </select><br><br>
-        <input type="submit" value="Enter">
-      </form>
+      
+      
+
       </div>
     </div>
     <!-- /#page-content-wrapper -->

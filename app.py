@@ -427,7 +427,7 @@ class ChooseOption(webapp2.RequestHandler):
         else:
             # go to add parameter
             template = JINJA_ENVIRONMENT.get_template('add-param-option.html')
-            self.response.write(template.render(currentUser=currentUser, currentUserEncode=urllib.urlencode(currentUserEncode), param=paramString))
+            self.response.write(template.render(currentUser=currentUser, currentUserEncode=urllib.urlencode(currentUserEncode), paramEncode=urllib.urlencode(paramStringEncode), param=paramString))
 
 class CustomParams(webapp2.RequestHandler):
     def post(self):
@@ -465,6 +465,61 @@ class RemoveOption(webapp2.RequestHandler):
         template = JINJA_ENVIRONMENT.get_template('choose-parameter.html')
         self.response.write(template.render(currentUser=currentUser, currentUserEncode=urllib.urlencode(currentUserEncode), customMessage=customMessage))
 
+class AddOption(webapp2.RequestHandler):
+    def post(self):
+        currentUser = self.request.get('username')
+        currentUserEncode = {'username' : currentUser}  
+        
+        paramString = self.request.get('param')
+        customOption = self.request.get('option').title()
+        check = True
+
+        # convert param to datastore object class
+        if (paramString == 'coverTheme'):
+            paramObject = coverTheme
+        elif (paramString == 'paperColour'):
+            paramObject = paperColour
+        elif (paramString == 'paperType'):
+            paramObject = paperType
+
+        paramQuery = paramObject.query()
+        paramResult = paramQuery.fetch()
+
+        for option in paramResult:
+            if str(getattr(option, paramString)) == customOption:
+                check = False
+                customMessage='Error: Option already exists.'
+      
+        if check is True:
+            if (paramString == 'coverTheme'):
+                newObject = coverTheme(coverTheme=customOption)
+            elif (paramString == 'paperColour'):
+                newObject = paperColour(paperColour=customOption)
+            elif (paramString == 'paperType'):
+                newObject = paperType(paperType=customOption)
+            
+            newObject.put()
+            customMessage = 'New option added successfully.'
+
+        template = JINJA_ENVIRONMENT.get_template('choose-parameter.html')
+        self.response.write(template.render(currentUser=currentUser, currentUserEncode=urllib.urlencode(currentUserEncode), customMessage=customMessage))
+
+class ConsoleReturn(webapp2.RequestHandler):
+    def post(self):
+        currentUser = self.request.get('username')
+        currentUserEncode = {'username' : currentUser}  
+
+        template = JINJA_ENVIRONMENT.get_template('admin-console.html')
+        self.response.write(template.render(currentUser=currentUser, currentUserEncode=urllib.urlencode(currentUserEncode)))
+
+class MainReturn(webapp2.RequestHandler):
+    def post(self):
+        currentUser = self.request.get('username')
+        currentUserEncode = {'username' : currentUser}  
+
+        template = JINJA_ENVIRONMENT.get_template('main.html')
+        self.response.write(template.render(currentUser=currentUser, currentUserEncode=urllib.urlencode(currentUserEncode)))
+
 # [START app]
 app = webapp2.WSGIApplication([
     ('/', Home),
@@ -489,4 +544,7 @@ app = webapp2.WSGIApplication([
     ('/choose-option', ChooseOption),
     ('/remove-option', RemoveOption),
     ('/custom-params', CustomParams),
+    ('/add-option', AddOption),
+    ('/console-return', ConsoleReturn),
+    ('/main-return', MainReturn),
 ], debug=True)
