@@ -80,11 +80,25 @@
       </nav>
 
       <div class="container-fluid">
-        <h1 class="mt-4">Admin Console</h1>
-        <h1 class="mt-4">Welcome {{ currentUser }}!</h1>
+        <h1 class="mt-4">Alter Customization Options</h1>
         <div style="color: red;" class="custom-bottom-margin">
           {{ customMessage }}
       </div>
+      <br>
+      <form action="/choose-option?{{currentUserEncode}}" method="POST">
+        <label for="param">Choose a customization parameter to configure:</label><br>
+        <select id="param" name="param">
+          <option value="coverTheme">Cover Theme</option>
+          <option value="paperColour">Paper Colour</option>
+          <option value="paperType">Paper Type</option>
+        </select><br><br>
+        <label for="action">Choose an action to perform:</label><br>
+        <select id="action" name="action">
+          <option value="remove">Remove Option from this Parameter</option>
+          <option value="add">Add Option to this Parameter</option>
+        </select><br><br>
+        <input type="submit" value="Enter">
+      </form>
       </div>
     </div>
     <!-- /#page-content-wrapper -->

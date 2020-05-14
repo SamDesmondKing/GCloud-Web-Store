@@ -395,6 +395,76 @@ class MakePurchase(webapp2.RequestHandler):
         self.response.write(template.render(currentUser=currentUser, currentUserEncode=urllib.urlencode(currentUserEncode), customMessage='Purchase Successful'))
 
 
+class ChooseOption(webapp2.RequestHandler):
+    def post(self):
+        currentUser = self.request.get('username')
+        currentUserEncode = {'username' : currentUser}
+
+        paramString = self.request.get('param')
+        paramStringEncode = {'param' : paramString}
+
+        # convert param to datastore object class
+        if (paramString == 'coverTheme'):
+            paramObject = coverTheme
+        elif (paramString == 'paperColour'):
+            paramObject = paperColour
+        elif (paramString == 'paperType'):
+            paramObject = paperType
+
+        action = self.request.get('action')
+        
+        if (action == 'remove'):
+            # go to remove parameter with appropriate list
+            result = []
+            optionQuery = paramObject.query()
+            optionResult = optionQuery.fetch()
+
+            for option in optionResult:
+                result.append(getattr(option, paramString))
+
+            template = JINJA_ENVIRONMENT.get_template('delete-param-option.html')
+            self.response.write(template.render(currentUser=currentUser, currentUserEncode=urllib.urlencode(currentUserEncode), options=result, param=urllib.urlencode(paramStringEncode)))
+        else:
+            # go to add parameter
+            template = JINJA_ENVIRONMENT.get_template('add-param-option.html')
+            self.response.write(template.render(currentUser=currentUser, currentUserEncode=urllib.urlencode(currentUserEncode), param=paramString))
+
+class CustomParams(webapp2.RequestHandler):
+    def post(self):
+        currentUser = self.request.get('username')
+        currentUserEncode = {'username' : currentUser}    
+
+        template = JINJA_ENVIRONMENT.get_template('choose-parameter.html')
+        self.response.write(template.render(currentUser=currentUser, currentUserEncode=urllib.urlencode(currentUserEncode)))
+
+class RemoveOption(webapp2.RequestHandler):
+    def post(self):
+        currentUser = self.request.get('username')
+        currentUserEncode = {'username' : currentUser}  
+
+        paramString = self.request.get('param')
+
+        result = self.request.get('value', allow_multiple=True)
+
+        # convert param to datastore object class
+        if (paramString == 'coverTheme'):
+            paramObject = coverTheme
+        elif (paramString == 'paperColour'):
+            paramObject = paperColour
+        elif (paramString == 'paperType'):
+            paramObject = paperType
+
+        paramQuery = paramObject.query()
+        paramResult = paramQuery.fetch()
+
+        for option in paramResult:
+            if str(getattr(option, paramString)) in str(result):
+                option.key.delete()
+                customMessage='Option removed successfully.'
+
+        template = JINJA_ENVIRONMENT.get_template('choose-parameter.html')
+        self.response.write(template.render(currentUser=currentUser, currentUserEncode=urllib.urlencode(currentUserEncode), customMessage=customMessage))
+
 # [START app]
 app = webapp2.WSGIApplication([
     ('/', Home),
@@ -416,4 +486,7 @@ app = webapp2.WSGIApplication([
     ('/creatediary', CreateDiary),
     ('/purchasediary', PurchaseDiary),
     ('/makepurchase', MakePurchase),
+    ('/choose-option', ChooseOption),
+    ('/remove-option', RemoveOption),
+    ('/custom-params', CustomParams),
 ], debug=True)
