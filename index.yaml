@@ -5,10 +5,4 @@ indexes:
   properties:
   - name: username
   
-- kind: diary
-  ancestor: no
-  properties:
-  - user: username
-    direction: desc
-  - purchaseDate: purchaseDate
-    direction: desc
+

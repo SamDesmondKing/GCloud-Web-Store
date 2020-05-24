@@ -9,7 +9,7 @@
 
   <title>Diary App</title>
 
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:400,800">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:200,400">
 
   <!-- Bootstrap core CSS -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
@@ -19,22 +19,29 @@
   <link href="css\home.css" rel="stylesheet">
 
 </head>
+
 <body>
   <div class="d-flex" id="wrapper">
     <div class="border-right" id="sidebar-wrapper">
       <div class="sidebar-heading font-weight-bold">
         <a class="text-dark" role="button">
-          <h1 style="color:black"><form action="/main-return?{{ currentUserEncode }}&admincheck=0" method="post">
-            <h3><small><bold></bold><button type="submit" value="Submit" style="border: none; background: none; font-size: 35px;">MY
-              <strong>DIARY</strong></button></bold></small></h3>
-        </form></strong></h1>
+          <h1 style="color:black">
+            <form action="/main-return?{{ currentUserEncode }}&admincheck=0" method="post">
+              <h3><small>
+                  <bold></bold><button type="submit" value="Submit"
+                    style="border: none; background: none; font-size: 35px;">MY
+                    <strong>DIARY</strong></button></bold>
+                </small></h3>
+            </form></strong>
+          </h1>
         </a>
       </div>
       <!-- Sidebar -->
       <div class="list-group list-group-flush">
         <div id="grey-border">
           <form action="/creatediary?{{ currentUserEncode }}" method="post" class="grey-border">
-            <input type="submit" value="Create Your Diary" class="list-group-item list-group-item-action font-weight-bold">
+            <input type="submit" value="Create Your Diary"
+              class="list-group-item list-group-item-action font-weight-bold">
           </form>
         </div>
         <div id="grey-border">
@@ -88,33 +95,39 @@
             </div>
           </div>
       </nav>
+
       <div class="container-fluid">
-        <h1 class="mt-4">Customise Your Diary</h1>
-        <h1 class="mt-4">Current User: {{ currentUser }}</h1>
+        <h1 class="mt-4">Welcome {{ currentUser }}!</h1>
+        <div style="color: red;" class="custom-bottom-margin">
+          {{ customMessage }}
+        </div>
         <br>
-        <form action="/purchasediary?{{currentUserEncode}}" method="post">
-          <label for="paperColour">Choose a paper colour:</label><br>
-          <select name="paperColour">
-            {% for colour in paperColours %}
-            <option value="{{ colour }}">{{ colour }}</option>
-            {% endfor %}
-          </select><br><br>
-          <label for="coverTheme">Choose a cover theme:</label><br>
-          <select name="coverTheme">
-            {% for theme in coverThemes %}
-            <option value="{{ theme }}">{{ theme }}</option>
-            {% endfor %}
-          </select><br><br>
-          <label for="paperType">Choose a paper type:</label><br>
-          <select name="paperType">
-            {% for type in paperTypes %}
-            <option value="{{ type }}">{{ type }}</option>
-            {% endfor %}
-          </select><br><br>
-          <label for="coverText">Custom Cover Text:</label><br>
-          <input type="text" name="coverText" value="My Diary"><br><br>
-          <input type="submit" value="Go to Checkout">
-        </form>
+                <table>
+                    <tr>
+                        <th>Purchase Date</th>
+                        <th>User</th>
+                        <th>Cover Text</th>
+                        <th>Cover Theme</th>
+                        <th>Paper Colour</th>
+                        <th>Paper Type</th>
+                        <th>Payment Choice</th>
+                        <th>Delivery Choice</th>
+                        <th>Price</th>
+                    </tr>
+                    {% for diary in diaryRecords %}
+                    <tr>
+                        <td>{{diary.purchaseDate}}</td>
+                        <td>{{diary.user}}</td>
+                        <td>{{diary.coverText}}</td>
+                        <td>{{diary.coverTheme}}</td>
+                        <td>{{diary.paperColour}}</td>
+                        <td>{{diary.paperType}}</td>
+                        <td>{{diary.paymentChoice}}</td>
+                        <td>{{diary.deliveryOption}}</td>
+                        <td>{{diary.price}}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
       </div>
     </div>
     <!-- /#page-content-wrapper -->

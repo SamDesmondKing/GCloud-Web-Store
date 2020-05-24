@@ -520,6 +520,37 @@ class MainReturn(webapp2.RequestHandler):
         template = JINJA_ENVIRONMENT.get_template('main.html')
         self.response.write(template.render(currentUser=currentUser, currentUserEncode=urllib.urlencode(currentUserEncode)))
 
+class CustomerHistory(webapp2.RequestHandler):
+    def post(self):
+        currentUser = self.request.get('username')
+        currentUserEncode = {'username' : currentUser}  
+
+        diaries = []
+        diaryQuery = diary.query().filter(ndb.GenericProperty("user") == currentUser)
+        results = diaryQuery.fetch()
+
+        for result in results:
+            diaries.append(result) 
+
+        template = JINJA_ENVIRONMENT.get_template('customer-history.html')
+        self.response.write(template.render(currentUser=currentUser, currentUserEncode=urllib.urlencode(currentUserEncode), diaryRecords=diaries))
+
+class TotalHistory(webapp2.RequestHandler):
+    def post(self):
+        currentUser = self.request.get('username')
+        currentUserEncode = {'username' : currentUser}  
+
+        diaries = []
+        diaryQuery = diary.query()
+        diaryQuery.order = ['-purchaseDate']
+        results = diaryQuery.fetch()
+
+        for result in results:
+            diaries.append(result) 
+
+        template = JINJA_ENVIRONMENT.get_template('total-history.html')
+        self.response.write(template.render(currentUser=currentUser, currentUserEncode=urllib.urlencode(currentUserEncode), diaryRecords=diaries))
+
 # [START app]
 app = webapp2.WSGIApplication([
     ('/', Home),
@@ -547,4 +578,6 @@ app = webapp2.WSGIApplication([
     ('/add-option', AddOption),
     ('/console-return', ConsoleReturn),
     ('/main-return', MainReturn),
+    ('/customer-history', CustomerHistory),
+    ('/total-history', TotalHistory),
 ], debug=True)
