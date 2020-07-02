@@ -15,4 +15,4 @@ Store can be viewed here (as of 2/7/2020)</br>
 sepm-diary-shop.ts.r.appspot.com
 
 ## Key Files
-All app logic can be found in the app.py file in this directory.  
+All app logic can be found [here](app.py).  
