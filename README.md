@@ -11,5 +11,8 @@ This was build with a team of 5 for RMIT's Software Engineering Project
 Management subject. An Agile methodology (scrum) was used to manage and 
 complete this project.
 
+Store can be viewed here (as of 2/7/2020)
+sepm-diary-shop.ts.r.appspot.com
+
 ## Key Files
 All app logic can be found in the app.py file in this directory.  
