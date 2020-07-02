@@ -299,7 +299,7 @@ class DeactivateUser(webapp2.RequestHandler):
 
         if response == False:
             template = JINJA_ENVIRONMENT.get_template('admin-console.html')
-            self.response.write(template.render('Error: user not found.', currentUser=currentUser, currentUserEncode=urllib.urlencode(user_encode)))
+            self.response.write(template.render(customMessage='Error: user not found.', currentUser=currentUser, currentUserEncode=urllib.urlencode(user_encode)))
 
 class CreateDiary(webapp2.RequestHandler):
     def post(self):
