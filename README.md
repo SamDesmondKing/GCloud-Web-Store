@@ -1,4 +1,4 @@
-## GCloud Web Store for Customized Diaries
+# GCloud Web Store for Customized Diaries
 
 Cloud-based web store built using GCloud's WebApp2 framework (Python).
 
@@ -11,5 +11,5 @@ This was build with a team of 5 for RMIT's Software Engineering Project
 Management subject. An Agile methodology (scrum) was used to manage and 
 complete this project.
 
-# Key Files
+## Key Files
 All app logic can be found in the app.py file in this directory.  
